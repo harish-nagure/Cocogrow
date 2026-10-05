@@ -1,0 +1,6 @@
+import Product from '../models/Product.js';
+export async function getProducts(req,res,next){try{const q=String(req.query.q||'').trim();const filter={active:{$ne:false}};if(req.query.category)filter.category=req.query.category;if(q)filter.$or=[{name:{$regex:q,$options:'i'}},{category:{$regex:q,$options:'i'}},{description:{$regex:q,$options:'i'}}];res.json(await Product.find(filter).sort({featured:-1,createdAt:-1}));}catch(e){next(e);}}
+export async function getProductById(req,res,next){try{const p=await Product.findOne({_id:req.params.id,active:{$ne:false}});if(!p)return res.status(404).json({message:'Product not found.'});res.json(p);}catch(e){next(e);}}
+export async function createProduct(req,res,next){try{res.status(201).json(await Product.create(req.body));}catch(e){next(e);}}
+export async function updateProduct(req,res,next){try{const p=await Product.findByIdAndUpdate(req.params.id,req.body,{new:true,runValidators:true});if(!p)return res.status(404).json({message:'Product not found.'});res.json(p);}catch(e){next(e);}}
+export async function deleteProduct(req,res,next){try{const p=await Product.findByIdAndUpdate(req.params.id,{active:false},{new:true});if(!p)return res.status(404).json({message:'Product not found.'});res.json({message:'Product deactivated successfully.',product:p});}catch(e){next(e);}}

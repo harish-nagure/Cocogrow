@@ -1,0 +1,15 @@
+import express from 'express';
+import { protect, admin } from '../middleware/auth.js';
+import * as c from '../controllers/adminController.js';
+const router = express.Router();
+router.use(protect, admin);
+router.get('/stats', c.getStats);
+router.get('/products', c.listProducts); router.post('/products', c.createProduct); router.get('/products/:id', c.getProduct); router.put('/products/:id', c.updateProduct); router.delete('/products/:id', c.deleteProduct);
+router.get('/plants', c.listPlants); router.post('/plants', c.createPlant); router.get('/plants/:id', c.getPlant); router.put('/plants/:id', c.updatePlant); router.delete('/plants/:id', c.deletePlant);
+router.get('/ingredients', c.listIngredients); router.post('/ingredients', c.createIngredient); router.put('/ingredients/:id', c.updateIngredient); router.delete('/ingredients/:id', c.deleteIngredient);
+router.get('/mix-rules', c.listMixRules); router.post('/mix-rules', c.createMixRule); router.put('/mix-rules/:id', c.updateMixRule); router.delete('/mix-rules/:id', c.deleteMixRule);
+router.get('/inventory', c.inventory); router.post('/inventory/:id/add', c.addStock); router.post('/inventory/:id/remove', c.removeStock); router.put('/inventory/:id', c.setStock);
+router.get('/orders', c.listOrders); router.get('/orders/:id', c.getOrder); router.put('/orders/:id/status', c.updateOrderStatus);
+router.get('/users', c.listUsers); router.get('/users/:id', c.getUser); router.put('/users/:id/status', c.updateUserStatus);
+router.get('/reports/overview', c.reportOverview); router.get('/reports/sales', c.reportSales); router.get('/reports/orders', c.reportOrders); router.get('/reports/custom-mixes', c.reportCustomMixes);
+export default router;
